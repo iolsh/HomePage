@@ -1,0 +1,73 @@
+@import url(https://fonts.googleapis.com/css?family=Oswald:400,300,700|Droid+Serif:400,400italic,700,700italic|Shadows+Into+Light);
+
+/** General **/
+html, body {
+    height: 100%;
+    width: 100%;
+}
+body {
+    background-image: url("/img/texture.png");
+    color: white;
+}
+
+/** Anchors **/
+a { 
+    color: white;
+}
+a:focus, a:hover {
+    color: antiquewhite;
+}
+
+/** Navigation related **/
+ul.nav.navbar-nav li {
+    font-family: 'Oswald', sans-serif; 
+}
+ul.nav.navbar-nav li a:hover, ul.nav.navbar-nav li a:focus {
+    background-color: transparent;
+}
+
+ul.nav.navbar-nav li.active a, ul.nav.navbar-nav li.active a:hover, ul.nav.navbar-nav li.active a:focus {
+    border-bottom: 1px solid antiquewhite;
+    background-color: transparent;
+}
+.navbar-custom ul.nav li {
+    display: inline-block;
+    margin: 0 auto;
+}
+.navbar-custom .navbar-toggle .icon-bar {
+    color: white;
+    background-color: antiquewhite;
+}
+div#menu.collapse.navbar-collapse {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.lft {
+    float: left;   
+}
+.rgt {
+    float: right;   
+}
+
+/** Front page **/
+.introText {
+    font-family: 'Droid Serif', serif;
+    font-size: 42px;
+}
+
+.panelText {
+    color: black;
+}
+
+/** Small screens **/
+@media (max-width: 768px){
+    /* Navigation related */
+    .lft {
+        text-align: center;
+        float: none;
+    }
+    .rgt {
+        text-align: center;
+        float: none;
+    }
+} 
