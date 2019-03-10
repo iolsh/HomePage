@@ -25,10 +25,15 @@ public class User extends BaseEntity {
     private String email;
     @Column
     private boolean enabled;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userId", cascade = CascadeType.ALL)
     private Set<Role> roles = new HashSet<>();
 
     public User(String userName, String password, String firstName, String lastName, String email) {
-
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.enabled = true;
     }
 }

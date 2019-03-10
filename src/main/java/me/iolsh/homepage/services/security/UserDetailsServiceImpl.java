@@ -1,5 +1,6 @@
 package me.iolsh.homepage.services.security;
 
+import me.iolsh.homepage.model.Role;
 import me.iolsh.homepage.model.User;
 import me.iolsh.homepage.repositories.RoleRepository;
 import me.iolsh.homepage.repositories.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component("userDetailsService")
@@ -33,7 +35,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException(String.format("User %s not found!", username));
         }
         User user = userOptional.get();
-        List<GrantedAuthority> authorities = user.getRoles().stream()
+        Set<Role> roles = user.getRoles().isEmpty() ? roleRepository.findByUserId(user.getId()) : user.getRoles();
+        List<GrantedAuthority> authorities = roles.stream()
                 .map(i -> new SimpleGrantedAuthority("ROLE_" + i.getRole()))
                 .collect(Collectors.toList());
 

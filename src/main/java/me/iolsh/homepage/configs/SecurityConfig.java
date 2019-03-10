@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
@@ -26,8 +28,6 @@ import java.util.List;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${homepage.char_secret}")
-    private String char_secret;
     @Value("${homepage.rememberMeKey}")
     private String rememberMeKey;
 
@@ -40,9 +40,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     PersistentTokenRepository tokenRepository;
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
+    @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
         dao.setUserDetailsService(userDetailsService);
+        dao.setPasswordEncoder(passwordEncoder());
         return dao;
     }
 
@@ -57,7 +64,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     RememberMeServices rememberMeServices() {
         RememberMeServices services = new PersistentTokenBasedRememberMeServices(rememberMeKey,
                 userDetailsService, tokenRepository);
-        //services.setParameter("remember-me"); //TODO check
         return services;
     }
 
@@ -93,7 +99,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-                .passwordEncoder(new StandardPasswordEncoder(char_secret));
+        auth.authenticationProvider(daoAuthenticationProvider());
     }
 }

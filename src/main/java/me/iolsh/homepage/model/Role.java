@@ -19,11 +19,11 @@ public class Role extends BaseEntity {
     @Column
     private String role;
 
-    @ManyToOne
-    private User user;
+    @JoinColumn(name = "userId")
+    private Long userId;
 
     public Role(User user, Roles role) {
-        this.user = user;
+        this.userId = user.getId();
         this.role = role.name();
     }
 
