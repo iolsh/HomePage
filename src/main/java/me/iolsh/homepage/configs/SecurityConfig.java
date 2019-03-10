@@ -85,8 +85,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/notes").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/notes/comment").authenticated()
-                .anyRequest().permitAll();
-                //.and().requiresChannel().anyRequest().requiresSecure();
+                .anyRequest().permitAll()
+                //.and().requiresChannel().anyRequest().requiresSecure()
+                .and().csrf().disable();
     }
 
 

@@ -25,9 +25,10 @@ public class User extends BaseEntity {
     private String email;
     @Column
     private boolean enabled;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Role> roles = new HashSet<>();
 
+    public User(String userName, String password, String firstName, String lastName, String email) {
+
+    }
 }

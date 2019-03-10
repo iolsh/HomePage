@@ -1,13 +1,7 @@
 package me.iolsh.homepage.model;
 
 import lombok.*;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-
-import java.util.Set;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -18,9 +12,19 @@ import java.util.Set;
 @Table(name = "roles")
 public class Role extends BaseEntity {
 
+    public enum Roles {
+        USER, ADMIN
+    }
+
     @Column
     private String role;
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+
+    @ManyToOne
+    private User user;
+
+    public Role(User user, Roles role) {
+        this.user = user;
+        this.role = role.name();
+    }
 
 }
