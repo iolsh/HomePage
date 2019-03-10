@@ -39,10 +39,6 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Value("${homepage.char_secret}")
-    private String char_secret;
-
-
     @RequestMapping(value = "/register", method = POST)
     String processRegistration(@Valid HomePageUser user, Errors errors, HttpServletRequest request) {
         if (errors.hasErrors()) {
