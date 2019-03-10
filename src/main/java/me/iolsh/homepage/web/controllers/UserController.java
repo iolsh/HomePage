@@ -5,7 +5,6 @@ import me.iolsh.homepage.model.User;
 import me.iolsh.homepage.repositories.RoleRepository;
 import me.iolsh.homepage.repositories.UserRepository;
 import me.iolsh.homepage.web.command.HomePageUser;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -76,7 +75,4 @@ public class UserController {
             return "redirect:/error";
         }
     }
-
-
-
 }

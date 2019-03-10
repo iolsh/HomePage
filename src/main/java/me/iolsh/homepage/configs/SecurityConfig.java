@@ -12,11 +12,11 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${homepage.rememberMeKey}")
@@ -88,12 +89,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic()
                 .realmName("HomePageApp")
-                .and().authorizeRequests()
+                .and().authenticationProvider(daoAuthenticationProvider()).authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/notes").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/notes/comment").authenticated()
                 .anyRequest().permitAll()
                 //.and().requiresChannel().anyRequest().requiresSecure()
-                .and().csrf().disable();
+                .and().csrf().disable()
+        ;
     }
 
 
