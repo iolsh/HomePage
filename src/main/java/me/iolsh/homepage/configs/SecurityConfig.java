@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -25,8 +23,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration
-@EnableWebSecurity
+@EnableWebSecurity //(debug = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${homepage.rememberMeKey}")
@@ -84,20 +81,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().loginPage("/login")
                 .and().logout().logoutSuccessUrl("/")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .and()
-                .rememberMe().rememberMeServices(rememberMeServices()).key(rememberMeKey)
-                .and()
-                .httpBasic()
-                .realmName("HomePageApp")
-                .and().authenticationProvider(daoAuthenticationProvider()).authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/notes").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/notes/comment").authenticated()
-                .anyRequest().permitAll()
+                .and().httpBasic().and()
+                .authorizeRequests()
+                .and().rememberMe().rememberMeServices(rememberMeServices()).key(rememberMeKey)
+                .and().authorizeRequests().anyRequest().permitAll()
                 //.and().requiresChannel().anyRequest().requiresSecure()
                 .and().csrf().disable()
+
         ;
     }
-
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
