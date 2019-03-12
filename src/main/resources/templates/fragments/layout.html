@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      lang="en">
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout (template, menu)">
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -11,7 +10,7 @@
     <link rel="shortcut icon" href=""/>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.4.1/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.4.1/css/bootstrap-theme.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/webjars/font-awesome/5.7.2/css/fontawesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/webjars/font-awesome/5.7.2/css/all.min.css"/>
     <link rel="stylesheet" href="/css/main.css"/>
     <script type="text/javascript" src="/js/custom.js"></script>
 
@@ -39,9 +38,14 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="menu">
                         <ul class="nav navbar-nav rgt">
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/about">About</a></li>
-                            <li><a href="/notes">Notes</a></li>
+                            <li th:fragment="menuItem (path,active,text)" class="active" th:class="${active==menu ? 'active' : ''}">
+                                <a th:href="@{__${path}__}">
+                                    <span th:text="${text}">Template</span>
+                                </a>
+                            </li>
+                            <li th:replace="::menuItem ('/','home', 'Home')"></li>
+                            <li th:replace="::menuItem ('/about','about', 'About')"></li>
+                            <li th:replace="::menuItem ('/notes','notes', 'Notes')"></li>
                         </ul>
                         <ul class="nav navbar-nav lft">
                             <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
@@ -63,25 +67,7 @@
         <div class="col-sm-2 col-sm-offset-1">
             <img src="/img/fellow_narrow.png" class="img-responsive center-block"/>
         </div>
-        <div class="col-sm-7">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h1 class="introText">
-                        <span class="text-uppercase">Mr Iolsh</span>
-                        <small> template only</small>
-                    </h1>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <br/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <p>Customize me</p>
-                </div>
-            </div>
+        <th:block th:include="${template}"/>
         </div>
     </div>
 </div>
