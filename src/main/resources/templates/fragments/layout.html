@@ -48,7 +48,9 @@
                             <li th:replace="::menuItem ('/notes','notes', 'Notes')"></li>
                         </ul>
                         <ul class="nav navbar-nav lft">
-                            <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                            <li th:if="${#authorization.expression('!isAuthenticated()')}">
+                                <a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
+                            </li>
                             <li th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')} : ${false}">
                                 <a th:case="${true}" th:href="@{/logout}"><span
                                         class="glyphicon glyphicon-log-out"></span> Logout</a>

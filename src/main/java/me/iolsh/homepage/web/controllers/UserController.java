@@ -1,5 +1,6 @@
 package me.iolsh.homepage.web.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import me.iolsh.homepage.model.Role;
 import me.iolsh.homepage.model.User;
 import me.iolsh.homepage.repositories.RoleRepository;
@@ -22,6 +23,7 @@ import javax.validation.Valid;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+@Slf4j
 @Controller
 public class UserController {
 
@@ -41,7 +43,7 @@ public class UserController {
     @RequestMapping(value = "/register", method = POST)
     String processRegistration(@Valid HomePageUser user, Errors errors, HttpServletRequest request) {
         if (errors.hasErrors()) {
-            return "register";
+            return "/register";
         }
         User newUser = new User(user.getUserName(), passwordEncoder.encode(user.getPassword()),
                 user.getFirstName(), user.getLastName(), user.getEmail());
@@ -60,8 +62,6 @@ public class UserController {
     public String login() {
         return "login";
     }
-
-
 
     private String doAutoLogin(HomePageUser user, HttpServletRequest request) {
         UsernamePasswordAuthenticationToken token =
