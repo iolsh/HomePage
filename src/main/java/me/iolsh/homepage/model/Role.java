@@ -1,8 +1,11 @@
 package me.iolsh.homepage.model;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.persistence.*;
 
+@Slf4j
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,8 +26,14 @@ public class Role extends BaseEntity {
     private Long userId;
 
     public Role(User user, Roles role) {
+        String u = user != null ? user.toString() : "user null";
+        String r = role != null ? role.toString() : "role null";
+        log.info("\tU: " + u + "\n\tR: " + r);
         this.userId = user.getId();
         this.role = role.name();
+        if (user == null) {
+            throw new NullPointerException();
+        }
     }
 
 }
