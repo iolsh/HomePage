@@ -1,15 +1,11 @@
 package me.iolsh.homepage.web.controllers;
 
-import me.iolsh.homepage.model.Role;
 import me.iolsh.homepage.model.User;
 import me.iolsh.homepage.repositories.RoleRepository;
 import me.iolsh.homepage.repositories.UserRepository;
-import me.iolsh.homepage.web.command.HomePageUser;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,21 +41,14 @@ public class UserControllerTest {
     }
 
     @Test
-    @Ignore
     public void processRegistration() throws Exception {
-        HomePageUser webUser = newTestUser();
-        User user = getUser(webUser);
-        Role role = new Role(user, Role.Roles.USER);
-        //user.getRoles().add(role);
-        //Role spyRole = Mockito.spy(new Role(any(User.class), Role.Roles.USER));
-        Mockito.doReturn(role).when(new Role(user, Role.Roles.USER));
 
-        UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword());
+        User mockUser =  mock(User.class);
+        UsernamePasswordAuthenticationToken mockToken = mock(UsernamePasswordAuthenticationToken.class);
 
-        when(authenticationManager.authenticate(token)).thenReturn(token);
-        //when(userRepository.save(user)).thenReturn(user);
-
+        when(userRepository.save(any())).thenReturn(mockUser);
+        when(authenticationManager.authenticate(any())).thenReturn(mockToken);
+        when(mockToken.isAuthenticated()).thenReturn(true);
 
         mockMvc.perform(
                 post("/register/")
@@ -70,28 +59,31 @@ public class UserControllerTest {
                 .param("email", "test@user.com")
                 .param("password", "password")
         )
-        .andExpect(status().isOk())
-        .andExpect(view().name("/register"))
+        .andExpect(status().isFound())
+        .andExpect(view().name("redirect:/"))
         .andExpect(model().attributeExists("homePageUser"))
-        //.andExpect(model().hasErrors())
+        .andExpect(model().hasNoErrors())
 
         ;
     }
-//    @Test
-//    public void failRegistration() throws Exception {
-//        HomePageUser newUser = null;
-//        //newUser.setEmail(null);
-//
-//        ResultActions res = mockMvc.perform(post("/register/", newUser)
-//                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-//                .andExpect(status().isOk())
-//                .andExpect(view().name("/register"))
-//                .andExpect(model().attributeExists("homePageUser"))
-//                .andExpect(model().hasErrors())
-//                ;//   .andExpect(
-//        System.out.println(res);
-//
-//    }
+
+    @Test
+    public void testRegistrationFailed() throws Exception {
+        mockMvc.perform(
+                post("/register/")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("firstName", "Test")
+                        .param("lastName", "User")
+                        .param("email", "test@user.com")
+                        .param("password", "password")
+                )
+                .andExpect(status().isOk())
+                .andExpect(view().name("/register"))
+                .andExpect(model().attributeExists("homePageUser"))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeErrorCount("homePageUser", 1))
+                .andExpect(model().attributeHasFieldErrorCode("homePageUser", "userName", "NotNull"));
+    }
 
     @Test
     public void register() throws Exception {
@@ -101,26 +93,16 @@ public class UserControllerTest {
     }
 
     @Test
-    public void login() {
+    public void login() throws  Exception{
+        mockMvc.perform(get("/login/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("login"));
+
+        mockMvc.perform(post("/login/").contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("username", "any")
+                .param("password", "any")
+        )
+        .andExpect(status().isOk());
+
     }
-
-
-    private  HomePageUser newTestUser() {
-        HomePageUser newUser = new HomePageUser();
-        //newUser.setId(1l);
-        newUser.setFirstName("Test");
-        newUser.setLastName("User");
-        newUser.setEmail("test@user.com");
-        newUser.setUserName("test_user");
-        newUser.setPassword("password");
-       return newUser;
-    }
-
-    private User getUser(HomePageUser webUser) {
-        User user = new User(webUser.getUserName(), webUser.getPassword(), webUser.getFirstName(),
-            webUser.getLastName(), webUser.getEmail());
-        user.setId(1L);
-        return user;
-    }
-
 }

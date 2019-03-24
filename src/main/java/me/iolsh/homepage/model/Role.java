@@ -26,14 +26,8 @@ public class Role extends BaseEntity {
     private Long userId;
 
     public Role(User user, Roles role) {
-        String u = user != null ? user.toString() : "user null";
-        String r = role != null ? role.toString() : "role null";
-        log.info("\tU: " + u + "\n\tR: " + r);
         this.userId = user.getId();
         this.role = role.name();
-        if (user == null) {
-            throw new NullPointerException();
-        }
     }
 
 }
