@@ -5,8 +5,11 @@ import me.iolsh.homepage.repositories.RoleRepository;
 import me.iolsh.homepage.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class UserControllerTest {
 
     @Mock
@@ -29,14 +33,15 @@ public class UserControllerTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
-    UserController controller;
+    @InjectMocks
+    private UserController controller;
 
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        controller = new UserController(userRepository, userRoleRepository, authenticationManager, passwordEncoder);
+        //controller = new UserController(userRepository, userRoleRepository, authenticationManager, passwordEncoder);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

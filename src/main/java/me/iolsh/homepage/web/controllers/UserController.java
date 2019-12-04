@@ -15,13 +15,12 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Slf4j
 @Controller
@@ -40,7 +39,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @RequestMapping(value = "/register", method = POST)
+    @PostMapping(value = "/register")
     String processRegistration(@Valid HomePageUser user, Errors errors, HttpServletRequest request) {
         if (errors.hasErrors()) {
             return "/register";
@@ -52,7 +51,7 @@ public class UserController {
         return doAutoLogin(user, request);
     }
 
-    @RequestMapping(value = "/register", method = GET)
+    @GetMapping(value = "/register")
     public String register(Model model) {
         model.addAttribute(new HomePageUser());
         return "register";

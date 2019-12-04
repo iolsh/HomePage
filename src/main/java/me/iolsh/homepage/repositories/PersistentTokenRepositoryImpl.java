@@ -37,13 +37,13 @@ public class PersistentTokenRepositoryImpl implements PersistentTokenRepository 
     @Override
     public PersistentRememberMeToken getTokenForSeries(String seriesId) {
         Optional<RememberMeToken> tokenOptional = rememberMeTokenRepository.findBySeries(seriesId);
-        if(tokenOptional.isEmpty()) {
-            return null;
-        } else {
-            RememberMeToken token = tokenOptional.get();
-            return new PersistentRememberMeToken(
-                token.getUserName(), token.getSeries(), token.getTokenValue(), token.getDate());
+        RememberMeToken token = tokenOptional.orElse(null);
+        PersistentRememberMeToken persistentRememberMeToken = null;
+        if (token != null) {
+            persistentRememberMeToken = new PersistentRememberMeToken(
+                    token.getUserName(), token.getSeries(), token.getTokenValue(), token.getDate());
         }
+        return persistentRememberMeToken;
     }
 
     @Override

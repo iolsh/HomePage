@@ -54,16 +54,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public ProviderManager providerManager() {
-        List<AuthenticationProvider> list = new ArrayList<AuthenticationProvider>();
+        List<AuthenticationProvider> list = new ArrayList<>();
         list.add(daoAuthenticationProvider());
         return new ProviderManager(list);
     }
 
     @Bean
     RememberMeServices rememberMeServices() {
-        RememberMeServices services = new PersistentTokenBasedRememberMeServices(rememberMeKey,
+        return new PersistentTokenBasedRememberMeServices(rememberMeKey,
                 userDetailsService, tokenRepository);
-        return services;
     }
 
     @Override
@@ -88,8 +87,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests().anyRequest().permitAll()
                 //.and().requiresChannel().anyRequest().requiresSecure()
                 .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-
-        ;
     }
 
     @Override
