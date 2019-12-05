@@ -32,16 +32,14 @@ public class UserControllerTest {
     private AuthenticationManager authenticationManager;
     @Mock
     private PasswordEncoder passwordEncoder;
-
     @InjectMocks
     private UserController controller;
 
     private MockMvc mockMvc;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         MockitoAnnotations.initMocks(this);
-        //controller = new UserController(userRepository, userRoleRepository, authenticationManager, passwordEncoder);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
